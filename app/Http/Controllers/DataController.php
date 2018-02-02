@@ -38,7 +38,7 @@ class DataController extends Controller
 
       $payload = json_encode($data);
       $this->dispatch(new DataMigrationJob($payload));
-
+      return response()->json(['message' => 'dispatched' ], 200);
     }
 
 }
