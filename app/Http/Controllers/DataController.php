@@ -11,10 +11,10 @@ class DataController extends Controller
     public function index(Request $request){
 
      /**
-      * payload for the queue
+      * payload array for the queue
       */
 
-      $payload = '';
+      $payload = array();
 
      /**
       * Check the content type
@@ -24,15 +24,13 @@ class DataController extends Controller
 
         $xml = simplexml_load_string($request->getContent());
         $payload = json_encode($xml);
-        Queue::push(new DataMigrationJob($payload));
+        $this->dispatch(new DataMigrationJob($payload));
 
-      }else if($request->hasFile('excel')){
+      }else if($request->hasFile('excel') || $request->hasFile('csv')){
 
         \Excel::load($request->file('excel'), function($reader) {
-
             $payload = json_encode($reader->all());
-            Queue::push(new DataMigrationJob($payload));
-
+            $this->dispatch(new DataMigrationJob($payload));
         });
 
       }

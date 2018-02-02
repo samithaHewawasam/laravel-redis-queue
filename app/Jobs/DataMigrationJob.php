@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class DataMigrationJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable;
 
     /**
      * Create a new job instance.
@@ -31,6 +31,9 @@ class DataMigrationJob implements ShouldQueue
      */
     public function handle()
     {
-        echo json_encode(json_decode($this->data, true));
+
+      // dd($this->data);
+        return $this->data;
+        //File::append(app_path().'/queue.txt', $this->data['message'].PHP_EOL);
     }
 }

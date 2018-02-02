@@ -1,0 +1,46 @@
+{
+	"info": {
+		"name": "IFS MIGRATION",
+		"_postman_id": "3b3c83ca-7d03-638f-6397-91d58f8ff0c8",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8000/api/data",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "excel",
+							"value": "",
+							"description": "",
+							"type": "file"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8000/api/data",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"data"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
