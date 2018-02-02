@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Queue;
 use App\Jobs\DataMigrationJob;
 
@@ -26,7 +27,7 @@ class DataController extends Controller
           $this->process(\Excel::load($file)->get());
           break;
         default:
-          return ":/";
+          return response()->json(['message' => 'Unsupported Format' ], 400);
           break;
       }
 
