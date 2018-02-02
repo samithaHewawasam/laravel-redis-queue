@@ -19,12 +19,12 @@ class DataController extends Controller
 
       switch ($request->file->getClientMimeType()) {
         case 'application/xml':
-          $this->process(simplexml_load_string($request->getContent()));
+          return $this->process(simplexml_load_string($request->getContent()));
           break;
         case 'application/vnd.ms-excel':
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
         case 'text/csv':
-          $this->process(\Excel::load($file)->get());
+          return $this->process(\Excel::load($file)->get());
           break;
         default:
           return response()->json(['message' => 'Unsupported Format' ], 400);
