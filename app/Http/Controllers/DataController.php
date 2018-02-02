@@ -10,29 +10,34 @@ class DataController extends Controller
 {
     public function index(Request $request){
 
-     /**
-      * payload array for the queue
-      */
+      $request->validate([
+        'file' => 'required|mimetypes:application/xml,text/csv,text/plain,application/csv,application/octet-stream'
+      ]);
 
-      $payload = array();
+      $file = $request->file('file');
 
-     /**
-      * Check the content type
-      */
-
-      if($request->getContentType() == 'xml'){
-
-        $xml = simplexml_load_string($request->getContent());
-        $payload = json_encode($xml);
-        $this->dispatch(new DataMigrationJob($payload));
-
-      }else if($request->hasFile('excel') || $request->hasFile('csv')){
-
-        \Excel::load($request->file('excel'), function($reader) {
-            $payload = json_encode($reader->all());
-            $this->dispatch(new DataMigrationJob($payload));
-        });
-
+      switch ($request->file->getClientMimeType()) {
+        case 'application/xml':
+          $this->process(simplexml_load_string($request->getContent()));
+          break;
+        case 'application/vnd.ms-excel':
+        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        case 'text/csv':
+          $this->process(\Excel::load($file)->get());
+          break;
+        default:
+          return ":/";
+          break;
       }
+
     }
+
+    protected function process($data)
+    {
+
+      $payload = json_encode($data);
+      $this->dispatch(new DataMigrationJob($payload));
+
+    }
+
 }
